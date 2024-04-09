@@ -1,0 +1,26 @@
+{
+    "name": "smeghead/phel-str",
+    "description": "ASCII Art.",
+    "type": "project",
+    "require": {
+        "php": ">=8.0.2",
+        "phel-lang/phel-lang": "^0.12.0"
+    },
+    "license": "Apache-2.0",
+    "autoload": {
+        "psr-4": {
+            "Smeghead\\PhelStr\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "smeghead",
+            "email": "smeghead7@gmail.com"
+        }
+    ],
+    "scripts": {
+        "test": [
+            "vendor/bin/phel test"
+        ]
+    }
+}
