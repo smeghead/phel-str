@@ -1,0 +1,9 @@
+(ns smeghead\test\tests
+  (:require phel\test :refer [deftest is])
+  (:require smeghead\test :refer [are]))
+
+(deftest t-are
+  (is (= nil (are [expected actual] (= expected actual)
+                     "a" "a")))
+  )
+

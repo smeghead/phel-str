@@ -1,0 +1,27 @@
+(ns smeghead\test)
+
+(defn- interleave-local
+  "Returns a vector with the first items of each col, then the second items, etc."
+  [& xs]
+  (let [max (apply max (map count xs))]
+    (loop [i 0
+           res []]
+      (let [nths (map |(get $ i) xs)]
+        (if (<= max i)
+          res
+          (recur (php/+ i 1) (concat res nths)))))))
+
+(defmacro are [argv form & xs]
+  (let [count (count argv)]
+    (loop [as (take count xs)
+           rest (drop count xs)
+           statements []]
+      #(println as)
+      #(println rest)
+      (if-not (empty? as)
+        (let [s `(let ,(interleave-local argv as)
+                   (is ,form))]
+          (recur (take count rest) (drop count rest) (push statements s)))
+        (let []
+          #(println statements)
+          `(do ,@statements))))))

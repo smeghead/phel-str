@@ -49,3 +49,10 @@
                                          (let [x (values (php-array-to-map x))]
                                            (apply replacement x))) s)
       (php/preg_replace match replacement s))))
+
+(defn join
+  "Returns a string of all elements in coll, as returned by (seq coll),
+   separated by an optional separator."
+  [separator & [coll]]
+  (let [[coll separator] (if (nil? coll) [separator ""] [coll separator])]
+    (php/implode separator (to-php-array coll))))

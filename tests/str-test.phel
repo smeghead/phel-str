@@ -1,5 +1,6 @@
 (ns smeghead\str\tests
   (:require phel\test :refer [deftest is])
+  (:require smeghead\test :refer [are])
   (:require smeghead\str :as s))
 
 (deftest t-split
@@ -44,18 +45,20 @@
 #  (is (= "OObarfoo" (s/replace-first "foobarfoo" "/f(o+)/" (fn [[m g1]] (s/upper-case g1)))))
 #  (is (= "baz\\bangslash" (s/replace-first "bazslashbangslash" "/slash/" (constantly "\\")))))
 #
-#(deftest t-join
-#  (are [x coll] (= x (s/join coll))
-#       "" nil
-#       "" []
-#       "1" [1]
-#       "12" [1 2])
-#  (are [x sep coll] (= x (s/join sep coll))
-#       "1,2,3" \, [1 2 3]
-#       "" \, []
-#       "1" \, [1]
-#       "1 and-a 2 and-a 3" " and-a " [1 2 3]))
-#
+
+
+(deftest t-join
+  (are [x coll] (= x (s/join coll))
+       "" nil
+       "" []
+       "1" [1]
+       "12" [1 2])
+  (are [x sep coll] (= x (s/join sep coll))
+       "1,2,3" "," [1 2 3]
+       "" "," []
+       "1" "," [1]
+       "1 and-a 2 and-a 3" " and-a " [1 2 3]))
+
 #(deftest t-trim-newline
 #  (is (= "foo" (s/trim-newline "foo\n")))
 #  (is (= "foo" (s/trim-newline "foo\r\n")))
