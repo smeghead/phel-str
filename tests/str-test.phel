@@ -11,9 +11,6 @@
 (deftest t-reverse
   (is (= "tab" (s/reverse "bat"))))
 
-(deftest t-upper-case
-  (is (= "TAB" (s/upper-case "tab"))))
-
 (deftest t-replace
   (is (= "barbarbar" (s/replace "foobarfoo" "foo" "bar")))
   (is (= "foobarfoo" (s/replace "foobarfoo" "baz" "bar")))
@@ -59,36 +56,37 @@
        "1" "," [1]
        "1 and-a 2 and-a 3" " and-a " [1 2 3]))
 
-#(deftest t-trim-newline
-#  (is (= "foo" (s/trim-newline "foo\n")))
-#  (is (= "foo" (s/trim-newline "foo\r\n")))
-#  (is (= "foo" (s/trim-newline "foo")))
-#  (is (= "" (s/trim-newline ""))))
-#
-#(deftest t-capitalize
-#  (is (= "Foobar" (s/capitalize "foobar")))
-#  (is (= "Foobar" (s/capitalize "FOOBAR"))))
-#
-#(deftest t-triml
-#  (is (= "foo " (s/triml " foo ")))
-#  (is (= "" (s/triml "   ")))
-#  (is (= "bar" (s/triml "\u2002 \tbar"))))
-#
-#(deftest t-trimr
-#  (is (= " foo" (s/trimr " foo ")))
-#  (is (= "" (s/trimr "   ")))
-#  (is (= "bar" (s/trimr "bar\t \u2002"))))
-#
-#(deftest t-trim
-#  (is (= "foo" (s/trim "  foo  \r\n")))
-#  (is (= "bar" (s/trim "\u2000bar\t \u2002"))))
-#
-#(deftest t-upper-case
-#  (is (= "FOOBAR" (s/upper-case "Foobar"))))
-#
-#(deftest t-lower-case
-#  (is (= "foobar" (s/lower-case "FooBar"))))
-#
+(deftest t-trim-newline
+  (is (= "foo" (s/trim-newline "foo\n")))
+  (is (= "foo" (s/trim-newline "foo\r\n")))
+  (is (= "foo" (s/trim-newline "foo")))
+  (is (= "あいう" (s/trim-newline "あいう\r\n")))
+  (is (= "" (s/trim-newline ""))))
+
+(deftest t-capitalize
+  (is (= "Foobar" (s/capitalize "foobar")))
+  (is (= "Foobar" (s/capitalize "FOOBAR"))))
+
+(deftest t-triml
+  (is (= "foo " (s/triml " foo ")))
+  (is (= "" (s/triml "   ")))
+  (is (= "bar" (s/triml "\u{2002} \tbar"))))
+
+(deftest t-trimr
+  (is (= " foo" (s/trimr " foo ")))
+  (is (= "" (s/trimr "   ")))
+  (is (= "bar" (s/trimr "bar\t \u{2002}"))))
+
+(deftest t-trim
+  (is (= "foo" (s/trim "  foo  \r\n")))
+  (is (= "bar" (s/trim "\u{2000}bar\t \u{2002}"))))
+
+(deftest t-upper-case
+  (is (= "FOOBAR" (s/upper-case "Foobar"))))
+
+(deftest t-lower-case
+  (is (= "foobar" (s/lower-case "FooBar"))))
+
 #(deftest nil-handling
 #  (are [f args] (thrown? NullPointerException (apply f args))
 #       s/reverse [nil]

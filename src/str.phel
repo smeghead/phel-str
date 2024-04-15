@@ -56,3 +56,46 @@
   [separator & [coll]]
   (let [[coll separator] (if (nil? coll) [separator ""] [coll separator])]
     (php/implode separator (to-php-array coll))))
+
+(defn trim-newline
+  "Removes all trailing newline \\n or return \\r characters from
+  string.  Similar to Perl's chomp."
+  [s]
+  (loop [index (php/mb_strlen s)]
+    (if (zero? index)
+      ""
+      (let [ch (php/mb_substr s (dec index) 1)]
+        (if (or (= ch "\n") (= ch "\r"))
+          (recur (dec index))
+          (php/mb_substr s 0 index))))))
+
+(defn capitalize
+  "Converts first character of the string to upper-case, all other
+  characters to lower-case."
+  [s]
+  (php/ucfirst (php/strtolower s)))
+
+(defn lower-case
+  "Converts string to all lower-case."
+  [s]
+  (php/strtolower s))
+
+(defn upper-case
+  "Converts string to all upper-case."
+  [s]
+  (php/strtoupper s))
+
+(defn trim
+  "Removes whitespace from both ends of string."
+  [s]
+  (php/preg_replace "/^[\s]+|[\s]+$/u" "" s))
+
+(defn triml
+  "Removes whitespace from the left side of string."
+  [s]
+  (php/preg_replace "/^[\s]+/u" "" s))
+
+(defn trimr
+  "Removes whitespace from the right side of string."
+  [^CharSequence s]
+  (php/preg_replace "/[\s]+$/u" "" s))
