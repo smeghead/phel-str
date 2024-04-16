@@ -50,6 +50,45 @@
                                            (apply replacement x))) s)
       (php/preg_replace match replacement s))))
 
+(defn replace-first
+  "Replaces the first instance of match with replacement in s.
+
+   match/replacement can be:
+
+   char / char
+   string / string
+   pattern / (string or function of match).
+
+   See also replace.
+
+   The replacement is literal (i.e. none of its characters are treated
+   specially) for all cases above except pattern / string.
+
+   For pattern / string, $1, $2, etc. in the replacement string are
+   substituted with the string that matched the corresponding
+   parenthesized group in the pattern.  If you wish your replacement
+   string r to be used literally, use (re-quote-replacement r) as the
+   replacement argument.  See also documentation for
+   java.util.regex.Matcher's appendReplacement method.
+
+   Example:
+   (clojure.string/replace-first \"swap first two words\"
+                                 #\"(\\w+)(\\s+)(\\w+)\" \"$3$2$1\")
+   -> \"first swap two words\""
+  [s match replacement]
+  (let [match (if (and
+                    (> (php/mb_strlen match) 1)
+                    (=
+                      (php/substr match 0 1)
+                      (php/substr match -1 1)))
+                match
+                (format "/%s/" (php/preg_quote match "/")))]
+    (if (function? replacement)
+      (php/preg_replace_callback match (fn [x]
+                                         (let [x (values (php-array-to-map x))]
+                                           (apply replacement x))) s 1)
+      (php/preg_replace match replacement s 1))))
+
 (defn join
   "Returns a string of all elements in coll, as returned by (seq coll),
    separated by an optional separator."
@@ -97,5 +136,39 @@
 
 (defn trimr
   "Removes whitespace from the right side of string."
-  [^CharSequence s]
+  [s]
   (php/preg_replace "/[\s]+$/u" "" s))
+
+(defn blank?
+  "True if s is nil, empty, or contains only whitespace."
+  [s]
+  (if s
+    (loop [index 0]
+      (if (= (php/mb_strlen s) index)
+        true
+        (if (php/preg_match "/^\s$/u" (php/mb_substr s index 1))
+          (recur (inc index))
+          false)))
+    true))
+
+(defn starts-with?
+  "True if s starts with substr."
+  [s substr]
+  (php/str_starts_with s substr))
+
+(defn ends-with?
+  "True if s ends with substr."
+  [s substr]
+  (php/str_ends_with s substr))
+
+(defn includes?
+  "True if s includes substr."
+  [s substr]
+  (php/str_contains s substr))
+
+(defn re-quote-replacement
+  "Given a replacement string that you wish to be a literal
+   replacement for a pattern match in replace or replace-first, do the
+   necessary escaping of special characters in the replacement."
+  [replacement]
+  (php/preg_replace "/([\\\$])/" "\$1" replacement))
