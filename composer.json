@@ -3,8 +3,8 @@
     "description": "ASCII Art.",
     "type": "project",
     "require": {
-        "php": ">=8.0.2",
-        "phel-lang/phel-lang": "^0.12.0"
+        "php": ">=8.2",
+        "phel-lang/phel-lang": "^0.13"
     },
     "license": "Apache-2.0",
     "autoload": {
