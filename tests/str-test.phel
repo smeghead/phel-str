@@ -54,7 +54,7 @@
   (is (= "foo" (s/trim-newline "foo\n")))
   (is (= "foo" (s/trim-newline "foo\r\n")))
   (is (= "foo" (s/trim-newline "foo")))
-  (is (= "あいう" (s/trim-newline "あいう\r\n")))
+  (is (= "ｆｏｏ" (s/trim-newline "ｆｏｏ\r\n")))
   (is (= "" (s/trim-newline ""))))
 
 (deftest t-capitalize
