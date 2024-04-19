@@ -1,4 +1,5 @@
-(ns smeghead\str)
+(ns smeghead\str
+  (:require phel\core :as core))
 
 (defn split
   "Splits string on a regular expression.  Optional argument limit is
@@ -7,10 +8,18 @@
   [s re & [limit]]
   (values (php-array-to-map (php/preg_split re s (or limit -1)))))
 
+(defn join
+  "Returns a string of all elements in coll, as returned by (seq coll),
+   separated by an optional separator."
+  [separator & [coll]]
+  (let [[coll separator] (if (nil? coll) [separator ""] [coll separator])]
+    (php/implode separator (to-php-array coll))))
+
 (defn reverse
   "Returns s with its characters reversed."
   [s]
-  (php/strrev s))
+  (let [chars (php/mb_str_split s)]
+    (join (core/reverse chars))))
 
 (defn upper-case
   "Converts string to all upper-case."
@@ -34,8 +43,7 @@
    substituted with the string that matched the corresponding
    parenthesized group in the pattern.  If you wish your replacement
    string r to be used literally, use (re-quote-replacement r) as the
-   replacement argument.  See also documentation for
-   java.util.regex.Matcher's appendReplacement method."
+   replacement argument."
   [s match replacement]
   (let [match (if (and
                     (> (php/mb_strlen match) 1)
@@ -68,11 +76,10 @@
    substituted with the string that matched the corresponding
    parenthesized group in the pattern.  If you wish your replacement
    string r to be used literally, use (re-quote-replacement r) as the
-   replacement argument.  See also documentation for
-   java.util.regex.Matcher's appendReplacement method.
+   replacement argument.
 
    Example:
-   (clojure.string/replace-first \"swap first two words\"
+   (str/replace-first \"swap first two words\"
                                  #\"(\\w+)(\\s+)(\\w+)\" \"$3$2$1\")
    -> \"first swap two words\""
   [s match replacement]
@@ -88,13 +95,6 @@
                                          (let [x (values (php-array-to-map x))]
                                            (apply replacement x))) s 1)
       (php/preg_replace match replacement s 1))))
-
-(defn join
-  "Returns a string of all elements in coll, as returned by (seq coll),
-   separated by an optional separator."
-  [separator & [coll]]
-  (let [[coll separator] (if (nil? coll) [separator ""] [coll separator])]
-    (php/implode separator (to-php-array coll))))
 
 (defn trim-newline
   "Removes all trailing newline \\n or return \\r characters from
@@ -176,7 +176,7 @@
 (defn escape
   "Return a new string, using cmap to escape each character ch
    from s as follows:
-   
+
    If (cmap ch) is nil, append ch to the new string.
    If (cmap ch) is non-nil, append (str (cmap ch)) instead."
   [s cmap]
