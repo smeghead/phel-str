@@ -2,8 +2,7 @@
 
 > **Notice**: This library will be fully integrated in the core library from `>0.13`
 > 
-> See official [CHANGELOG.md](https://github.com/phel-lang/phel-lang/blob/main/CHANGELOG.md) 
-
+> See official [CHANGELOG.md](https://github.com/phel-lang/phel-lang/blob/main/CHANGELOG.md)
 
 string utilities in phel-lang.
 
